@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Cough sampler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Latest compiled and minified Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <style>
+    body {
+      background: linear-gradient(-45deg, #3964b3, #302a80, #18205e, #0c2053);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      color: #fff !important;
+}
+
+button {
+  display:block !important;
+  height: 100px !important;
+  width: 100px !important;
+  border-radius: 50% !important;
+  
+}
+  </style>
+  <style>
+  .switch {
+    
+    top: 50%;
+    left: 50%;
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    background: #eb4f37;
+    transition: all 0.2s ease;
+  }
+  input[type=radio] {
+    display: none;
+  }
+  .switch label {
+    cursor: pointer;
+    color: rgba(0,0,0,0.2);
+    width: 60px;
+    line-height: 50px;
+    transition: all 0.2s ease;
+  }
+  label[for=yes] {
+    
+    left: 0px;
+    height: 20px;
+  }
+  label[for=no] {
+    
+    right: 0px;
+  }
+  #no:checked ~ .switch {
+    background: #00bc9c;
+  }
+  #no:checked ~ .switch span {
+    background: #fff;
+    margin-left: -8px;
+  }
+  #no:checked ~ .switch span:after {
+    background: #fff;
+    height: 20px;
+    margin-top: -8px;
+    margin-left: 8px;
+  }
+  #yes:checked ~ .switch label[for=yes] {
+    color: #fff;
+  }
+  #no:checked ~ .switch label[for=no] {
+    color: #fff;
+  }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+  <body>
+    <section style="margin-top:50px;">
+      <div class="container-fluid d-flex justify-content-center">
+        <h3>Please, cough below so we can train our algorithm detect Coronavirus</h3>
+      </div>
+    </section>
+    <section>
+      <div class="container-fluid d-flex justify-content-center" >
+        <div id="controls" style="display: flex; flex-direction: column;">
+          <div class="outline">
+            <button id="recordButton" style="position: absolute;">
+              <svg height="65" width="65" class="mic-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" 
+               xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" 
+               enable-background="new 0 0 1000 1000" xml:space="preserve" style="fill:#1E2D70">
+                <g>
+                  <path d="M500,683.8c84.6,0,153.1-68.6,153.1-153.1V163.1C653.1,78.6,584.6,10,500,10c-84.6,0-153.1,68.6-153.1,153.1v367.5C346.9,615.2,415.4,683.8,500,683.8z M714.4,438.8v91.9C714.4,649,618.4,745,500,745c-118.4,0-214.4-96-214.4-214.4v-91.9h-61.3v91.9c0,141.9,107.2,258.7,245,273.9v124.2H346.9V990h306.3v-61.3H530.6V804.5c137.8-15.2,245-132.1,245-273.9v-91.9H714.4z"/>
+                </g>
+              </svg>
+            </button>
+          </div>
+          <button id="stopButton" style="position: absolute;" disabled >Stop</button>
+          <button id="pauseButton" disabled style="visibility: hidden;">Pause</button>
+        </div>
+        <div class="container-fluid fixed-bottom d-flex flex-row-reverse">
+          <p></p>
+          <p>Training for Corona AI</p>
+        </div>
+        <div id="formats" style="margin-top:10%; position: absolute;margin-top:65px;margin-left: 290px;" ><p>Format: start recording to see sample rate</p></div>
+      </div>
+    </section>
+  	<section style="margin-top:50px;">
+      <div class="container-fluid d-flex justify-content-center">
+        <p><strong>Recordings:</strong></p>
+  	    <ol id="recordingsList"></ol>
+      </div>
+    </section>
+    <section style="margin-top:50px;"> 
+      <div class="container-fluid d-flex justify-content-center">
+        <h3 style="margin-right: 20px;">As far as you know, are you currently infected with SARS-COV2?</h3>
+        <div class="toggle-radio">
+          <input type="radio" name="rdo" id="yes" checked>
+          <input type="radio" name="rdo" id="no">
+          <div class="switch">
+            <label for="yes">Yes</label>
+            <label for="no">No</label>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section style="">
+      <div class="container-fluid fixed-bottom d-flex flex-row-reverse">
+        <p></p>
+        <p>Training for Corona AI</p>
+      </div>
+    </section>
+    <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
+    <!--<script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    -->
+    <script src="./recorder-lib.js"></script>
+  	<script src="js/app.js"></script>
+  </body>
+</html>
